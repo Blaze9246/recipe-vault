@@ -127,24 +127,24 @@
 
     <script>
         // ⚠️ STEP 5: UPDATE THIS URL AFTER DEPLOYING BACKEND
-        const API_URL = 'http://2a02:4780:f:69c2::1:5000';
-        // For testing locally: const API_URL = 'http://localhost:5000';
+        // Load recipes from GitHub Pages JSON file
+        const API_URL = 'https://blaze9246.github.io/recipe-vault/recipes.json';
         
         let recipes = [];
 
         async function checkAPI() {
             try {
-                const response = await fetch(`${API_URL}/recipes`);
+                const response = await fetch(API_URL);
                 if (response.ok) {
                     document.getElementById('apiStatus').className = 'api-status connected';
-                    document.getElementById('apiStatus').textContent = '✅ Connected to API';
+                    document.getElementById('apiStatus').textContent = '✅ Connected - Recipes loaded';
                     loadRecipes();
                 } else {
                     throw new Error('API error');
                 }
             } catch (error) {
                 document.getElementById('apiStatus').className = 'api-status error';
-                document.getElementById('apiStatus').textContent = '❌ API not connected - using local storage';
+                document.getElementById('apiStatus').textContent = '❌ Using local storage';
                 recipes = JSON.parse(localStorage.getItem('recipes') || '[]');
                 renderRecipes();
             }
@@ -152,7 +152,7 @@
 
         async function loadRecipes() {
             try {
-                const response = await fetch(`${API_URL}/recipes`);
+                const response = await fetch(API_URL);
                 recipes = await response.json();
                 localStorage.setItem('recipes', JSON.stringify(recipes));
                 renderRecipes();
