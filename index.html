@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔥 Recipe Vault</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #fff;
+            padding: 20px;
+        }
+        .container { max-width: 800px; margin: 0 auto; }
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #f39c12, #e74c3c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .subtitle { text-align: center; color: #888; margin-bottom: 30px; }
+        .api-status {
+            text-align: center; padding: 10px; margin-bottom: 20px;
+            border-radius: 10px; font-size: 0.9rem;
+        }
+        .api-status.connected { background: rgba(46, 204, 113, 0.2); color: #2ecc71; }
+        .api-status.error { background: rgba(231, 76, 60, 0.2); color: #e74c3c; }
+        .add-btn {
+            width: 100%; padding: 15px;
+            background: linear-gradient(45deg, #f39c12, #e74c3c);
+            border: none; border-radius: 12px;
+            color: white; font-size: 1.1rem; font-weight: bold;
+            cursor: pointer; margin-bottom: 20px;
+        }
+        .recipe-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px; padding: 20px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .recipe-name { font-size: 1.3rem; font-weight: bold; margin-bottom: 10px; color: #f39c12; }
+        .recipe-meta { display: flex; gap: 15px; margin-bottom: 15px; font-size: 0.9rem; color: #888; }
+        .recipe-section { margin-bottom: 15px; }
+        .recipe-section h4 { color: #e74c3c; margin-bottom: 8px; font-size: 0.95rem; }
+        .recipe-section ul, .recipe-section ol { padding-left: 20px; color: #ccc; line-height: 1.6; }
+        .recipe-section li { margin-bottom: 5px; }
+        .loading { text-align: center; padding: 40px; color: #888; }
+        .empty { text-align: center; padding: 60px 20px; color: #666; }
+        .empty-icon { font-size: 4rem; margin-bottom: 20px; }
+        .modal {
+            display: none; position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); z-index: 1000;
+            justify-content: center; align-items: center; padding: 20px;
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: #1a1a2e; border-radius: 15px;
+            padding: 30px; width: 100%; max-width: 500px;
+            max-height: 90vh; overflow-y: auto;
+        }
+        .modal h2 { margin-bottom: 20px; color: #f39c12; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; color: #888; font-size: 0.9rem; }
+        .form-group input, .form-group textarea {
+            width: 100%; padding: 12px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px; color: white; font-size: 1rem;
+        }
+        .form-group textarea { min-height: 100px; resize: vertical; }
+        .form-actions { display: flex; gap: 10px; margin-top: 20px; }
+        .btn { flex: 1; padding: 12px; border: none; border-radius: 8px;
+               font-size: 1rem; cursor: pointer; }
+        .btn-primary { background: #2ecc71; color: white; }
+        .btn-secondary { background: rgba(255,255,255,0.1); color: white; }
+        .delete-btn {
+            background: #e74c3c; color: white; border: none;
+            padding: 8px 15px; border-radius: 6px;
+            cursor: pointer; font-size: 0.85rem; float: right;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔥 Recipe Vault</h1>
+        <p class="subtitle">Your Personal Recipe Collection</p>
+        
+        <div id="apiStatus" class="api-status">Checking API connection...</div>
+        
+        <button class="add-btn" onclick="openModal()">+ Add New Recipe</button>
+        
+        <div id="recipeList"><div class="loading">Loading recipes...</div></div>
+    </div>
+
+    <div id="addModal" class="modal">
+        <div class="modal-content">
+            <h2>Add New Recipe</h2>
+            <form id="recipeForm" onsubmit="saveRecipe(event)">
+                <div class="form-group">
+                    <label>Recipe Name</label>
+                    <input type="text" id="recipeName" required placeholder="e.g., Grilled Salmon">
+                </div>
+                <div class="form-group">
+                    <label>Calories</label>
+                    <input type="number" id="recipeCalories" placeholder="e.g., 450">
+                </div>
+                <div class="form-group">
+                    <label>Ingredients (one per line)</label>
+                    <textarea id="recipeIngredients" required placeholder="200g salmon&#10;1 tbsp olive oil&#10;Salt and pepper"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Steps (one per line)</label>
+                    <textarea id="recipeSteps" required placeholder="Preheat grill&#10;Season salmon&#10;Grill 4-5 min per side"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Recipe</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // ⚠️ STEP 5: UPDATE THIS URL AFTER DEPLOYING BACKEND
+        const API_URL = 'https://your-railway-url-here.railway.app';
+        // For testing locally: const API_URL = 'http://localhost:5000';
+        
+        let recipes = [];
+
+        async function checkAPI() {
+            try {
+                const response = await fetch(`${API_URL}/recipes`);
+                if (response.ok) {
+                    document.getElementById('apiStatus').className = 'api-status connected';
+                    document.getElementById('apiStatus').textContent = '✅ Connected to API';
+                    loadRecipes();
+                } else {
+                    throw new Error('API error');
+                }
+            } catch (error) {
+                document.getElementById('apiStatus').className = 'api-status error';
+                document.getElementById('apiStatus').textContent = '❌ API not connected - using local storage';
+                recipes = JSON.parse(localStorage.getItem('recipes') || '[]');
+                renderRecipes();
+            }
+        }
+
+        async function loadRecipes() {
+            try {
+                const response = await fetch(`${API_URL}/recipes`);
+                recipes = await response.json();
+                localStorage.setItem('recipes', JSON.stringify(recipes));
+                renderRecipes();
+            } catch (error) {
+                recipes = JSON.parse(localStorage.getItem('recipes') || '[]');
+                renderRecipes();
+            }
+        }
+
+        function renderRecipes() {
+            const list = document.getElementById('recipeList');
+            if (recipes.length === 0) {
+                list.innerHTML = `<div class="empty"><div class="empty-icon">🍳</div><h3>No recipes yet</h3><p>Add your first recipe!</p></div>`;
+                return;
+            }
+            list.innerHTML = recipes.map((recipe, index) => `
+                <div class="recipe-card">
+                    <button class="delete-btn" onclick="deleteRecipe(${index}, '${recipe.id || ''}')">Delete</button>
+                    <div class="recipe-name">${recipe.name}</div>
+                    <div class="recipe-meta">
+                        ${recipe.calories ? `<span>🔥 ${recipe.calories} cal</span>` : ''}
+                        <span>📅 ${new Date(recipe.date || Date.now()).toLocaleDateString()}</span>
+                    </div>
+                    <div class="recipe-section">
+                        <h4>🥘 Ingredients</h4>
+                        <ul>${recipe.ingredients.map(ing => `<li>${ing}</li>`).join('')}</ul>
+                    </div>
+                    <div class="recipe-section">
+                        <h4>👨‍🍳 Steps</h4>
+                        <ol>${recipe.steps.map(step => `<li>${step}</li>`).join('')}</ol>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function saveRecipe(event) {
+            event.preventDefault();
+            const recipe = {
+                name: document.getElementById('recipeName').value,
+                calories: parseInt(document.getElementById('recipeCalories').value) || 0,
+                ingredients: document.getElementById('recipeIngredients').value.split('\n').filter(i => i.trim()),
+                steps: document.getElementById('recipeSteps').value.split('\n').filter(s => s.trim()),
+                date: new Date().toISOString()
+            };
+            
+            try {
+                const response = await fetch(`${API_URL}/recipes`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(recipe)
+                });
+                if (response.ok) {
+                    const saved = await response.json();
+                    recipes.unshift(saved);
+                } else {
+                    throw new Error('API save failed');
+                }
+            } catch (error) {
+                recipe.id = Date.now().toString();
+                recipes.unshift(recipe);
+                localStorage.setItem('recipes', JSON.stringify(recipes));
+            }
+            
+            closeModal();
+            renderRecipes();
+            document.getElementById('recipeForm').reset();
+        }
+
+        async function deleteRecipe(index, id) {
+            if (!confirm('Delete this recipe?')) return;
+            try {
+                if (id) await fetch(`${API_URL}/recipes/${id}`, { method: 'DELETE' });
+            } catch (e) {}
+            recipes.splice(index, 1);
+            localStorage.setItem('recipes', JSON.stringify(recipes));
+            renderRecipes();
+        }
+
+        function openModal() { document.getElementById('addModal').classList.add('active'); }
+        function closeModal() { document.getElementById('addModal').classList.remove('active'); }
+        document.getElementById('addModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        checkAPI();
+    </script>
+</body>
+</html>
