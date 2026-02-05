@@ -416,6 +416,16 @@
             <h2 class="section-title"><span>💪</span> High Protein</h2>
             <div id="healthyGrid" class="recipe-grid"></div>
         </div>
+        
+        <div id="snackSection" style="display:none;">
+            <h2 class="section-title"><span>🍿</span> Snacks</h2>
+            <div id="snackGrid" class="recipe-grid"></div>
+        </div>
+        
+        <div id="dessertSection" style="display:none;">
+            <h2 class="section-title"><span>🍰</span> Desserts</h2>
+            <div id="dessertGrid" class="recipe-grid"></div>
+        </div>
     </div>
     
     <!-- Floating Action Button -->
@@ -488,13 +498,32 @@
         }
         
         function categorizeRecipe(recipe) {
-            const name = recipe.name.toLowerCase();
-            const ingredients = recipe.ingredients.join(' ').toLowerCase();
-            
-            if (name.includes('protein') || name.includes('chicken') || name.includes('egg') || ingredients.includes('protein')) {
-                return { category: 'healthy', display: 'High Protein' };
+            // First check if recipe has category from JSON
+            if (recipe.category) {
+                const cat = recipe.category.toLowerCase();
+                const sub = recipe.subcategory || '';
+                
+                const displayMap = {
+                    'breakfast': 'Breakfast',
+                    'lunch': 'Lunch',
+                    'dinner': 'Dinner',
+                    'snack': 'Snack',
+                    'dessert': 'Dessert',
+                    'side': 'Side',
+                    'beverage': 'Drink'
+                };
+                
+                return { 
+                    category: cat, 
+                    display: displayMap[cat] || cat.charAt(0).toUpperCase() + cat.slice(1)
+                };
             }
-            if (name.includes('breakfast') || name.includes('pancake') || name.includes('egg') || name.includes('oat')) {
+            
+            // Fallback to keyword matching only if no category in JSON
+            const name = recipe.name.toLowerCase();
+            const ingredients = recipe.ingredients ? recipe.ingredients.join(' ').toLowerCase() : '';
+            
+            if (name.includes('breakfast') || name.includes('pancake') || name.includes('oat')) {
                 return { category: 'breakfast', display: 'Breakfast' };
             }
             if (name.includes('lunch') || name.includes('salad') || name.includes('sandwich')) {
@@ -503,8 +532,11 @@
             if (name.includes('dinner') || name.includes('pasta') || name.includes('steak') || name.includes('pizza')) {
                 return { category: 'dinner', display: 'Dinner' };
             }
-            if (name.includes('dessert') || name.includes('cake') || name.includes('cookie') || name.includes('sweet')) {
+            if (name.includes('dessert') || name.includes('cake') || name.includes('cookie') || name.includes('sweet') || name.includes('bun')) {
                 return { category: 'dessert', display: 'Dessert' };
+            }
+            if (name.includes('snack') || name.includes('nugget') || name.includes('chip')) {
+                return { category: 'snack', display: 'Snack' };
             }
             return { category: 'dinner', display: 'Dinner' };
         }
@@ -574,14 +606,26 @@
         }
         
         function updateCategorySections() {
-            const categories = ['breakfast', 'lunch', 'dinner', 'snack', 'dessert'];
+            // Map button names to category names
+            const categoryMap = {
+                'breakfast': 'breakfast',
+                'lunch': 'lunch',
+                'dinner': 'dinner',
+                'snack': 'snacks',  // category 'snack' -> section 'snacks'
+                'dessert': 'dessert',
+                'healthy': 'healthy'
+            };
             
-            categories.forEach(cat => {
-                const section = document.getElementById(cat + 'Section');
-                const grid = document.getElementById(cat + 'Grid');
+            Object.entries(categoryMap).forEach(([cat, sectionName]) => {
+                const section = document.getElementById(sectionName + 'Section');
+                const grid = document.getElementById(sectionName + 'Grid');
+                
+                if (!section || !grid) return; // Skip if section doesn't exist
+                
                 const catRecipes = recipes.filter(r => categorizeRecipe(r).category === cat);
                 
                 if (catRecipes.length > 0) {
+                    section.style.display = 'block';
                     grid.innerHTML = catRecipes.map(recipe => {
                         const imageContent = getRecipeImage(recipe);
                         return `
@@ -598,6 +642,8 @@
                             </div>
                         `;
                     }).join('');
+                } else {
+                    section.style.display = 'none';
                 }
             });
         }
@@ -660,6 +706,8 @@
                 document.getElementById('breakfastSection').style.display = 'none';
                 document.getElementById('lunchSection').style.display = 'none';
                 document.getElementById('dinnerSection').style.display = 'none';
+                document.getElementById('snackSection').style.display = 'none';
+                document.getElementById('dessertSection').style.display = 'none';
                 document.getElementById('healthySection').style.display = 'none';
                 
                 // Show selected
@@ -671,6 +719,10 @@
                     document.getElementById('lunchSection').style.display = 'block';
                 } else if (category === 'dinner') {
                     document.getElementById('dinnerSection').style.display = 'block';
+                } else if (category === 'snacks') {
+                    document.getElementById('snackSection').style.display = 'block';
+                } else if (category === 'dessert') {
+                    document.getElementById('dessertSection').style.display = 'block';
                 } else if (category === 'healthy') {
                     document.getElementById('healthySection').style.display = 'block';
                 } else {
