@@ -1,25 +1,37 @@
 [
   {
-    "id": "1770264307540",
-    "name": "Protein Cinnamon Buns with Icing",
+    "id": "1770240603797",
+    "name": "\u2744\ufe0f Protein Cinnamon Buns \u2744\ufe0f",
     "calories": 414,
     "protein": 25,
     "carbs": 61,
     "fat": 4,
-    "category": "breakfast",
+    "category": "dessert",
+    "subcategory": "high-protein",
     "source": "Hossein Sobhani (Instagram/Facebook)",
+    "yield": "4 buns",
     "ingredients": [
-      "Cinnamon buns (dough recipe not shown in video)",
-      "Yogurt (for icing)",
-      "Protein powder (Levels Grass Fed Whey)",
-      "Cream cheese (for icing)"
+      "Dough (makes 4 buns):",
+      "280g - 0% plain Greek yogurt",
+      "280g - flour",
+      "1 tsp - baking powder",
+      "2 tbsp - zero cal granulated sweetener",
+      "1/2 tbsp - cinnamon",
+      "",
+      "Icing:",
+      "200g - 0% plain Greek yogurt",
+      "60g - low fat cream cheese",
+      "1.5 scoop - vanilla protein powder (Levels)"
     ],
     "steps": [
-      "Prepare cinnamon bun dough (full recipe not shown in original video)",
-      "Bake cinnamon buns according to dough instructions",
-      "While buns are baking, prepare icing by combining yogurt, protein powder, and cream cheese in a bowl",
-      "Whisk icing ingredients until smooth",
-      "Pour icing over warm cinnamon buns immediately after removing from oven",
+      "Mix yogurt, flour and baking powder in a bowl and knead with your hands",
+      "Form into a ball then roll out into a thin rectangle",
+      "Spray light layer of cooking spray, followed by cinnamon/zero cal sweetener",
+      "Roll it up and slice into 4 equal size pieces",
+      "Place in baking dish and bake at 350\u00b0F for 20-30 min until puffy and golden",
+      "While baking, make icing by combining yogurt, protein powder, and cream cheese in a bowl",
+      "Whisk icing until smooth",
+      "Pour icing over warm cinnamon buns",
       "Enjoy!"
     ],
     "macros": {
@@ -30,7 +42,7 @@
         "protein": "25g"
       }
     },
-    "date": "2026-02-05T04:05:07.540995"
+    "date": "2026-02-05T04:07:50.191380"
   },
   {
     "id": "1770240603797",
