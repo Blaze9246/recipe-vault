@@ -314,6 +314,22 @@
             color: #555;
         }
         
+        .video-btn {
+            display: inline-block;
+            background: #1877f2;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 20px;
+            transition: background 0.3s;
+        }
+        
+        .video-btn:hover {
+            background: #166fe5;
+        }
+        
         /* Loading State */
         .loading {
             text-align: center;
@@ -428,6 +444,9 @@
                 <div class="modal-section">
                     <h3>👨‍🍳 Instructions</h3>
                     <ol id="modalSteps"></ol>
+                </div>
+                <div id="videoLinkSection" style="display:none; margin-top:20px;">
+                    <a id="videoLinkBtn" href="#" target="_blank" class="video-btn">📺 Watch Video on Facebook</a>
                 </div>
             </div>
         </div>
@@ -580,6 +599,16 @@
             
             document.getElementById('modalSteps').innerHTML = recipe.steps
                 .map(step => `<li>${step}</li>`).join('');
+            
+            // Show video link if available
+            const videoSection = document.getElementById('videoLinkSection');
+            const videoBtn = document.getElementById('videoLinkBtn');
+            if (recipe.facebook_link || recipe.video_url || recipe.source_url) {
+                videoSection.style.display = 'block';
+                videoBtn.href = recipe.facebook_link || recipe.video_url || recipe.source_url;
+            } else {
+                videoSection.style.display = 'none';
+            }
             
             document.getElementById('recipeModal').classList.add('active');
         }
