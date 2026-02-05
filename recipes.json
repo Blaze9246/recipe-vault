@@ -1,5 +1,38 @@
 [
   {
+    "id": "1770264307540",
+    "name": "Protein Cinnamon Buns with Icing",
+    "calories": 414,
+    "protein": 25,
+    "carbs": 61,
+    "fat": 4,
+    "category": "breakfast",
+    "source": "Hossein Sobhani (Instagram/Facebook)",
+    "ingredients": [
+      "Cinnamon buns (dough recipe not shown in video)",
+      "Yogurt (for icing)",
+      "Protein powder (Levels Grass Fed Whey)",
+      "Cream cheese (for icing)"
+    ],
+    "steps": [
+      "Prepare cinnamon bun dough (full recipe not shown in original video)",
+      "Bake cinnamon buns according to dough instructions",
+      "While buns are baking, prepare icing by combining yogurt, protein powder, and cream cheese in a bowl",
+      "Whisk icing ingredients until smooth",
+      "Pour icing over warm cinnamon buns immediately after removing from oven",
+      "Enjoy!"
+    ],
+    "macros": {
+      "per_bun_with_icing": {
+        "calories": 414,
+        "carbs": "61g",
+        "fat": "4g",
+        "protein": "25g"
+      }
+    },
+    "date": "2026-02-05T04:05:07.540995"
+  },
+  {
     "id": "1770240603797",
     "name": "53g Protein Crustless Pizza Pie",
     "calories": 0,
