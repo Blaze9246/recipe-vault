@@ -1,5 +1,39 @@
 [
   {
+    "id": "1770299776206",
+    "name": "Homemade Chicken Nuggets \ud83c\udf57",
+    "calories": 372,
+    "protein": 51,
+    "category": "dinner",
+    "subcategory": "high-protein",
+    "source": "Oskar Fit (Instagram/Facebook)",
+    "facebook_link": "https://www.facebook.com/share/r/1GLB7ov49a/",
+    "video_url": "https://www.facebook.com/share/r/1GLB7ov49a/",
+    "yield": "1 serving",
+    "description": "High protein homemade chicken nuggets - 372 calories, 51g protein",
+    "ingredients": [
+      "150g raw chicken breast",
+      "45g light cheddar cheese",
+      "1 medium egg",
+      "1/2 tsp paprika",
+      "1/4 tsp salt",
+      "1/2 tsp garlic powder"
+    ],
+    "steps": [
+      "Add all ingredients to food processor",
+      "Blend until smooth mixture forms",
+      "Shape into nugget shapes",
+      "Place on baking tray",
+      "Bake at 200\u00b0C (390\u00b0F) for 18-20 minutes",
+      "Serve hot and enjoy!"
+    ],
+    "macros": {
+      "calories": 372,
+      "protein": "51g"
+    },
+    "date": "2026-02-05T13:56:16.206915"
+  },
+  {
     "id": "1770271310632",
     "name": "1 Calorie Meringue Cookies",
     "calories": 1,
