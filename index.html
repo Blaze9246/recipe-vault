@@ -520,6 +520,16 @@
             }
         }
         
+        function getRecipeImage(recipe) {
+            // Check for cover_image or image field
+            const imagePath = recipe.cover_image || recipe.image;
+            if (imagePath) {
+                return `<img src="${imagePath}" alt="${recipe.name}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 15px;">`;
+            }
+            // Fall back to emoji
+            return getEmoji(recipe.name);
+        }
+
         function renderRecipes() {
             const grid = document.getElementById('recipeGrid');
             
@@ -536,10 +546,10 @@
             
             grid.innerHTML = recipes.map(recipe => {
                 const cat = categorizeRecipe(recipe);
-                const emoji = getEmoji(recipe.name);
+                const imageContent = getRecipeImage(recipe);
                 return `
                     <div class="recipe-card" onclick="openRecipe('${recipe.id}')">
-                        <div class="recipe-image">${emoji}</div>
+                        <div class="recipe-image">${imageContent}</div>
                         <div class="recipe-content">
                             <span class="recipe-category">${cat.display}</span>
                             <h3 class="recipe-title">${recipe.name}</h3>
@@ -557,7 +567,7 @@
         }
         
         function updateCategorySections() {
-            const categories = ['breakfast', 'lunch', 'dinner', 'healthy'];
+            const categories = ['breakfast', 'lunch', 'dinner', 'snack', 'dessert'];
             
             categories.forEach(cat => {
                 const section = document.getElementById(cat + 'Section');
@@ -566,10 +576,10 @@
                 
                 if (catRecipes.length > 0) {
                     grid.innerHTML = catRecipes.map(recipe => {
-                        const emoji = getEmoji(recipe.name);
+                        const imageContent = getRecipeImage(recipe);
                         return `
                             <div class="recipe-card" onclick="openRecipe('${recipe.id}')">
-                                <div class="recipe-image">${emoji}</div>
+                                <div class="recipe-image">${imageContent}</div>
                                 <div class="recipe-content">
                                     <span class="recipe-category">${categorizeRecipe(recipe).display}</span>
                                     <h3 class="recipe-title">${recipe.name}</h3>
@@ -590,7 +600,16 @@
             if (!recipe) return;
             
             document.getElementById('modalTitle').textContent = recipe.name;
-            document.getElementById('modalEmoji').textContent = getEmoji(recipe.name);
+            
+            // Show cover image or emoji
+            const modalEmoji = document.getElementById('modalEmoji');
+            const imagePath = recipe.cover_image || recipe.image;
+            if (imagePath) {
+                modalEmoji.innerHTML = `<img src="${imagePath}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 15px;">`;
+            } else {
+                modalEmoji.textContent = getEmoji(recipe.name);
+            }
+            
             document.getElementById('modalCalories').textContent = (recipe.calories || 'N/A') + ' cal';
             document.getElementById('modalCategory').textContent = categorizeRecipe(recipe).display;
             
