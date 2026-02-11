@@ -165,7 +165,7 @@
 
         async function loadRecipes() {
             try {
-                const response = await fetch('https://recipe-vault-backend-2o28.onrender.com/recipes');
+                const response = await fetch('https://recipe-vault-backend-2o28.onrender.com/recipes?v=2')
                 const data = await response.json();
                 recipes = data.map(r => ({
                     id: r.id,
